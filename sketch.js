@@ -55,6 +55,7 @@ const display = {
 
     const num = alg.shortest.length.toFixed(sigFig);
     text(`Shortest Route: ${num}`, ...textPos(1));
+
     display.drawRoute(alg.shortest.route, true);
   },
 
