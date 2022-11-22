@@ -1,4 +1,4 @@
-const cityCount = 7;
+const cityCount = 6;
 const citySize = 10;
 const bgColor = 20;
 const textP = 10; // padding
