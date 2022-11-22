@@ -1,4 +1,4 @@
-const cityCount = 5;
+const cityCount = 7;
 const citySize = 10;
 const bgColor = 20;
 const textP = 10; // padding
@@ -32,9 +32,10 @@ function drawRoute(route, bold = false) {
 }
 
 const display = {
-  title: () => text(`Algorithm: ${alg.toString()}`, textP, textP),
+  title: () => text(`Algorithm: ${alg.name}`, textP, textP),
 
   progress: () => {
+    strokeWeight(1);
     display.title();
 
     const num = parseFloat(100 * alg.progress).toFixed(sigFig);
@@ -45,6 +46,7 @@ const display = {
   },
 
   results: () => {
+    strokeWeight(1);
     display.title();
 
     text(
@@ -58,6 +60,8 @@ const display = {
 
 function windowResized() {
   resizeCanvas(innerWidth, innerHeight);
+  background(20);
+  display[alg.done ? "results" : "progress"]();
 }
 
 function setup() {
@@ -70,8 +74,8 @@ function setup() {
   const margin = 4 * textP + 2 * sizeOfText;
 
   for (let i = 0; i < cityCount; i++) {
-    const x = random(0, width);
-    const y = random(margin, height);
+    const x = random(margin, width - margin);
+    const y = random(margin, height - margin);
 
     cities.push({ x, y });
   }
@@ -84,7 +88,7 @@ function draw() {
   background(bgColor);
 
   alg.next();
-  if (alg.active) {
+  if (!alg.done) {
     display.progress();
   } else {
     timer.stop();

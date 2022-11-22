@@ -1,5 +1,7 @@
 class NaiveBruteForce {
   constructor(points) {
+    this.name = "Naive Brute Force";
+
     this.points = points;
     this.totalCalcs = factorial(this.points.length);
 
@@ -19,37 +21,26 @@ class NaiveBruteForce {
     };
   }
 
-  get active() {
-    return !this.done;
-  }
-
   get progress() {
     return (this.current.index + 1) / this.totalCalcs;
   }
 
   next() {
-    this.done = this.gen.next().done;
-  }
-
-  toString() {
-    return "Naive Brute Force";
-  }
-
-  _setShortest() {
-    this.shortest = { ...this.current };
+    return (this.done = this.gen.next().done);
   }
 
   *generator() {
     this.current.index = 0;
 
     while (this.current.index < this.totalCalcs) {
-      this.current.route = this.routes[this.current.index];
+      this.current.route = this.routes[this.current.index++];
       this.current.length = lengthOf(this.current.route);
 
-      if (this.current.length < this.shortest.length) this._setShortest();
+      if (this.current.length < this.shortest.length) {
+        this.shortest = { ...this.current };
+      }
 
       yield this.current.route;
-      this.current.index++;
     }
   }
 }

@@ -1,3 +1,5 @@
+// Borrowed this
+// https://stackoverflow.com/questions/9960908/permutations-in-javascript
 function getAllPermutations(inputArr) {
   var results = [];
 
