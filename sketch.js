@@ -1,21 +1,9 @@
-/**
- * NAIVE BRUTE FORCE
- *
- * Test times
- * f: mm:ss.ms
- * 3: 00:00.087
- * 4: 00:00.308
- * 5: 00:01.483
- * 6: 00:08.755
- * 7: 01:44.919
- *
- */
-const cityCount = 8;
+const cityCount = 5;
 const citySize = 10;
 const bgColor = 20;
-const textPadding = 10;
+const textP = 10; // padding
 const sizeOfText = 30;
-const sigFig = 1; // for percent text
+const sigFig = 2; // for percent text
 
 let cities = [];
 let textLocation;
@@ -44,16 +32,26 @@ function drawRoute(route, bold = false) {
 }
 
 const display = {
+  title: () => text(`Algorithm: ${alg.toString()}`, textP, textP),
+
   progress: () => {
+    display.title();
+
     const num = parseFloat(100 * alg.progress).toFixed(sigFig);
-    text(`Calculating: ${num}%`, ...textLocation);
+    text(`Calculating: ${num}%`, textP, 2 * textP + sizeOfText);
 
     drawRoute(alg.shortest.route, true);
     drawRoute(alg.current.route);
   },
 
   results: () => {
-    text(`Shortest Route: ${alg.shortest.length}`, ...textLocation);
+    display.title();
+
+    text(
+      `Shortest Route: ${alg.shortest.length.toFixed(2)}`,
+      textP,
+      textP * 2 + sizeOfText
+    );
     drawRoute(alg.shortest.route, true);
   },
 };
@@ -67,9 +65,9 @@ function setup() {
   background(bgColor);
   fill("white");
   textSize(sizeOfText);
+  textAlign(LEFT, TOP);
 
-  const margin = 2 * textPadding + sizeOfText;
-  textLocation = [textPadding, margin / 2 + textPadding];
+  const margin = 4 * textP + 2 * sizeOfText;
 
   for (let i = 0; i < cityCount; i++) {
     const x = random(0, width);

@@ -1,7 +1,6 @@
 class NaiveBruteForce {
   constructor(points) {
     this.points = points;
-    this.progress = 0;
     this.totalCalcs = factorial(this.points.length);
 
     this.routes = getAllPermutations(points);
@@ -24,12 +23,20 @@ class NaiveBruteForce {
     return !this.done;
   }
 
+  get progress() {
+    return (this.current.index + 1) / this.totalCalcs;
+  }
+
   next() {
-    const { value, done } = this.gen.next();
+    this.done = this.gen.next().done;
+  }
 
-    this.done = done;
+  toString() {
+    return "Naive Brute Force";
+  }
 
-    return value;
+  _setShortest() {
+    this.shortest = { ...this.current };
   }
 
   *generator() {
@@ -39,11 +46,7 @@ class NaiveBruteForce {
       this.current.route = this.routes[this.current.index];
       this.current.length = lengthOf(this.current.route);
 
-      if (this.current.length < this.shortest.length) {
-        this.shortest = { ...this.current };
-      }
-
-      this.progress = (this.current.index + 1) / this.totalCalcs;
+      if (this.current.length < this.shortest.length) this._setShortest();
 
       yield this.current.route;
       this.current.index++;
