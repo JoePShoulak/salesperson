@@ -8,33 +8,55 @@
  * 5: 00:01.483
  * 6: 00:08.755
  * 7: 01:44.919
+ *
  */
-const cityCount = 5;
+const cityCount = 8;
 const citySize = 10;
-const margin = 50;
 const bgColor = 20;
-const textOffset = 10;
-const sigFig = 1;
+const textPadding = 10;
+const sizeOfText = 30;
+const sigFig = 1; // for percent text
 
 let cities = [];
-let routes;
 let textLocation;
-let finished = false;
-let shortestLength = Number.MAX_VALUE;
-let shortestRoute;
-let startTime;
 
-let NBF;
+let alg;
 let gen;
+let timer;
 
-function drawRoute(route) {
+function drawRoute(route, bold = false) {
+  if (bold) {
+    strokeWeight(2);
+    stroke("white");
+  } else {
+    strokeWeight(1);
+    stroke(128);
+  }
+
   let oldCity;
   route.forEach((city) => {
     circle(city.x, city.y, citySize);
+
     if (oldCity) line(oldCity.x, oldCity.y, city.x, city.y);
+
     oldCity = city;
   });
 }
+
+const display = {
+  progress: () => {
+    const num = parseFloat(100 * alg.progress).toFixed(sigFig);
+    text(`Calculating: ${num}%`, ...textLocation);
+
+    drawRoute(alg.shortest.route, true);
+    drawRoute(alg.current.route);
+  },
+
+  results: () => {
+    text(`Shortest Route: ${alg.shortest.length}`, ...textLocation);
+    drawRoute(alg.shortest.route, true);
+  },
+};
 
 function windowResized() {
   resizeCanvas(innerWidth, innerHeight);
@@ -44,8 +66,10 @@ function setup() {
   createCanvas(innerWidth, innerHeight);
   background(bgColor);
   fill("white");
-  stroke("white");
-  textLocation = [textOffset, margin / 2 + textOffset];
+  textSize(sizeOfText);
+
+  const margin = 2 * textPadding + sizeOfText;
+  textLocation = [textPadding, margin / 2 + textPadding];
 
   for (let i = 0; i < cityCount; i++) {
     const x = random(0, width);
@@ -54,47 +78,19 @@ function setup() {
     cities.push({ x, y });
   }
 
-  NBF = new NaiveBruteForce(cities);
-  routes = NBF.routes;
-  noStroke();
-  textSize(30);
-  text(`Loading...`, ...textLocation);
-  startTime = new Date();
+  alg = new NaiveBruteForce(cities);
+  timer = new Timer();
 }
 
 function draw() {
   background(bgColor);
-  fill("white");
 
-  if (!NBF.next().done) {
-    const route = NBF.current.route;
-    const length = lengthOf(route);
-    if (length < shortestLength) {
-      shortestLength = length;
-      shortestRoute = NBF.current.index;
-    }
-
-    const progress = (NBF.current.index + 1) / factorial(cities.length);
-
-    noStroke();
-    text(
-      `Calculating: ${parseFloat(100 * progress).toFixed(sigFig)}%`,
-      ...textLocation
-    );
-
-    strokeWeight(2);
-    stroke("white");
-    drawRoute(routes[shortestRoute]);
-    strokeWeight(1);
-    stroke(128);
-    drawRoute(route);
+  alg.next();
+  if (alg.active) {
+    display.progress();
   } else {
-    noStroke();
-    text(`Shortest Route: ${shortestLength}`, ...textLocation);
-    stroke("white");
-    strokeWeight(2);
-    drawRoute(routes[shortestRoute]);
+    timer.stop();
+    display.results();
     noLoop();
-    console.log(displayTime(new Date() - startTime));
   }
 }

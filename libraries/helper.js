@@ -64,3 +64,13 @@ function displayTime(t) {
 
   return `${m}:${s}.${ms}`;
 }
+
+class Timer {
+  constructor() {
+    this.start = new Date();
+  }
+
+  stop() {
+    console.log(displayTime(new Date() - this.start));
+  }
+}
