@@ -2,19 +2,21 @@ const cityCount = 6;
 const citySize = 10;
 const bgColor = 20;
 const textP = 10; // padding
-const sizeOfText = 30;
-const margin = 4 * textP + 2 * sizeOfText;
-const sigFig = 2; // for percent text
+const txSize = 30;
+const margin = 4 * textP + 2 * txSize;
+const sigFig = 2;
 
 let cities = [];
-let textLocation;
 
 let alg;
 let gen;
 let timer;
 
+const textPos = (n) => [textP, textP + (textP + txSize) * n];
+
+// Helper for all our draw actions
 const display = {
-  title: () => text(`Algorithm: ${alg.name}`, textP, textP),
+  title: () => text(`Algorithm: ${alg.name}`, ...textPos(0)),
 
   drawRoute: (route, bold = false) => {
     if (bold) {
@@ -40,7 +42,7 @@ const display = {
     display.title();
 
     const num = parseFloat(100 * alg.progress).toFixed(sigFig);
-    text(`Calculating: ${num}%`, textP, 2 * textP + sizeOfText);
+    text(`Calculating: ${num}%`, ...textPos(1));
 
     display.drawRoute(alg.shortest.route, true);
     display.drawRoute(alg.current.route);
@@ -50,11 +52,8 @@ const display = {
     strokeWeight(1);
     display.title();
 
-    text(
-      `Shortest Route: ${alg.shortest.length.toFixed(2)}`,
-      textP,
-      textP * 2 + sizeOfText
-    );
+    const num = alg.shortest.length.toFixed(sigFig);
+    text(`Shortest Route: ${num}`, ...textPos(1));
     display.drawRoute(alg.shortest.route, true);
   },
 
@@ -71,7 +70,7 @@ function setup() {
   createCanvas(innerWidth, innerHeight);
   background(bgColor);
   fill("white");
-  textSize(sizeOfText);
+  textSize(txSize);
   textAlign(LEFT, TOP);
 
   for (let i = 0; i < cityCount; i++) {
