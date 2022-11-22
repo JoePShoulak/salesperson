@@ -1,9 +1,9 @@
 const cityCount = 6;
 const citySize = 10;
 const bgColor = 20;
-const textP = 10; // padding
+const txPad = 10;
 const txSize = 30;
-const margin = 4 * textP + 2 * txSize;
+const margin = 4 * txPad + 2 * txSize;
 const sigFig = 2;
 
 let cities = [];
@@ -12,7 +12,7 @@ let alg;
 let gen;
 let timer;
 
-const textPos = (n) => [textP, textP + (textP + txSize) * n];
+const textPos = (n) => [txPad, txPad + (txPad + txSize) * n];
 
 // Helper for all our draw actions
 const display = {
