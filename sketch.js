@@ -1,13 +1,14 @@
 const cityCount = 6;
 const citySize = 10;
+const sigFig = 2;
+
 const bgColor = 20;
+
 const txPad = 10;
 const txSize = 30;
 const margin = 4 * txPad + 2 * txSize;
-const sigFig = 2;
 
 let cities = [];
-
 let alg;
 let gen;
 let timer;
