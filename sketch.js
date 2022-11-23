@@ -1,9 +1,7 @@
 const cityCount = 6;
 const citySize = 10;
 const sigFig = 2;
-
 const bgColor = 20;
-
 const txPad = 10;
 const txSize = 30;
 const margin = 4 * txPad + 2 * txSize;
@@ -13,13 +11,14 @@ let alg;
 let gen;
 let timer;
 
-const textPos = (n) => [txPad, txPad + (txPad + txSize) * n];
+const getTextPosition = (n) => [txPad, txPad + (txPad + txSize) * n];
+const textPos = [getTextPosition(0), getTextPosition(1)];
 
 // Helper for all our draw actions
 const display = {
-  title: () => text(`Algorithm: ${alg.name}`, ...textPos(0)),
+  title: () => text(`Algorithm: ${alg.name}`, ...textPos[0]),
 
-  drawRoute: (route, bold = false) => {
+  route: (route, bold = false) => {
     if (bold) {
       strokeWeight(2);
       stroke("white");
@@ -43,10 +42,10 @@ const display = {
     display.title();
 
     const num = parseFloat(100 * alg.progress).toFixed(sigFig);
-    text(`Calculating: ${num}%`, ...textPos(1));
+    text(`Calculating: ${num}%`, ...textPos[1]);
 
-    display.drawRoute(alg.shortest.route, true);
-    display.drawRoute(alg.current.route);
+    display.route(alg.shortest.route, true);
+    display.route(alg.current.route);
   },
 
   results: () => {
@@ -54,9 +53,9 @@ const display = {
     display.title();
 
     const num = alg.shortest.length.toFixed(sigFig);
-    text(`Shortest Route: ${num}`, ...textPos(1));
+    text(`Shortest Route: ${num}`, ...textPos[1]);
 
-    display.drawRoute(alg.shortest.route, true);
+    display.route(alg.shortest.route, true);
   },
 
   state: () => display[alg.done ? "results" : "progress"](),
@@ -76,10 +75,10 @@ function setup() {
   textAlign(LEFT, TOP);
 
   for (let i = 0; i < cityCount; i++) {
-    const x = random(margin, width - margin);
-    const y = random(margin, height - margin);
-
-    cities.push({ x, y });
+    cities.push({
+      x: random(margin, width - margin),
+      y: random(margin, height - margin),
+    });
   }
 
   alg = new NaiveBruteForce(cities);

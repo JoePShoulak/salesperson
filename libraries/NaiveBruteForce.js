@@ -12,7 +12,7 @@ class NaiveBruteForce {
     this.current = {
       route: null,
       length: null,
-      index: null,
+      index: 0,
     };
 
     this.shortest = {
@@ -34,8 +34,6 @@ class NaiveBruteForce {
   }
 
   *generator() {
-    this.current.index = 0;
-
     while (this.current.index < this.totalCalcs) {
       this.current.route = this.routes[this.current.index++];
       this.current.length = lengthOf(this.current.route);
