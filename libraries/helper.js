@@ -1,52 +1,35 @@
-// Borrowed this
-// https://stackoverflow.com/questions/9960908/permutations-in-javascript
-function getAllPermutations(inputArr) {
-  var results = [];
+function getAllPermutations(arr) {
+  const allPermutations = [[...arr]];
+  const iArray = arr.map((_, i) => i);
 
-  function permute(arr, memo) {
-    var cur,
-      memo = memo || [];
+  for (let i = 1; i < factorial(iArray.length); i++) {
+    let x = iArray.length - 2;
+    while (true) if (iArray[x] < iArray[x + 1] || --x < 0) break;
+    if (x < 0) return null;
 
-    for (var i = 0; i < arr.length; i++) {
-      cur = arr.splice(i, 1);
+    let y = iArray.length - 1;
+    while (true) if (iArray[x] < iArray[y] || --y < 0) break;
 
-      if (arr.length === 0) results.push(memo.concat(cur));
-      permute(arr.slice(), memo.concat(cur));
-      arr.splice(i, 0, cur[0]);
-    }
+    swap(iArray, x, y);
+    iArray.push(...iArray.splice(x + 1).reverse());
 
-    return results;
+    allPermutations.push(iArray.map((i) => arr[i]));
   }
 
-  return permute(inputArr);
+  return allPermutations;
 }
 
 const factorial = (n) => [...Array(n).keys()].reduce((a, v) => a * (v + 1), 1);
 
-const distance = (p1, p2) => Math.sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2);
+const distTo = (p1, p2) => Math.sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2);
 
-const lengthOf = (line) => {
-  return line.slice(1).reduce((acc, val, i) => acc + distance(val, line[i]), 0);
-};
+const lengthOf = (l) => l.slice(1).reduce((a, v, i) => a + distTo(v, l[i]), 0);
 
-const swap = (arr, i, j) => {
-  const temp = arr[i];
-  arr[i] = arr[j];
-  arr[j] = temp;
-
-  return arr;
-};
+const swap = (a, i, j) => ([a[i], a[j]] = [a[j], a[i]]);
 
 const map = (val, cMin, cMax, nMin, nMax) => {
   const ratio = (nMax - nMin) / (cMax - cMin);
   return (val - cMin) * ratio + nMin;
-};
-
-const shuffle = (arr) => {
-  const rand = () => Math.floor(Math.random() * arr.length);
-  for (let _ = 0; _ < arr.length; _++) arr = swap(arr, rand(), rand());
-
-  return arr;
 };
 
 function pad(num, digits) {
