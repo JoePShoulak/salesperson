@@ -48,3 +48,5 @@ class NaiveBruteForce {
     }
   }
 }
+
+class NBF extends NaiveBruteForce {}
