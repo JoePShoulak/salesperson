@@ -38,7 +38,7 @@ function pad(num, digits) {
 }
 
 function displayTime(t) {
-  let ms = pad(t % 1000, 3);
+  const ms = pad(t % 1000, 3);
   t = (t - ms) / 1000;
 
   const s = pad(t % 60, 2);

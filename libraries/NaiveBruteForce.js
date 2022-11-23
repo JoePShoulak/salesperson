@@ -29,6 +29,10 @@ class NaiveBruteForce {
     return (this.done = this.gen.next().done);
   }
 
+  run() {
+    while (!this.done) this.next();
+  }
+
   *generator() {
     this.current.index = 0;
 
