@@ -81,7 +81,7 @@ function setup() {
     });
   }
 
-  alg = new NaiveBruteForce(cities);
+  alg = new BruteForce(cities);
   timer = new Timer();
 }
 
