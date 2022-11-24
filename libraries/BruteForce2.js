@@ -1,6 +1,6 @@
-class NaiveBruteForce {
+class BruteForce {
   constructor(points) {
-    this.name = "Naive Brute Force";
+    this.name = "Brute Force";
 
     this.points = points;
     this.totalCalcs = factorial(this.points.length);
@@ -12,7 +12,7 @@ class NaiveBruteForce {
     this.current = {
       route: null,
       length: null,
-      index: null,
+      index: 0,
     };
 
     this.shortest = {
@@ -34,8 +34,6 @@ class NaiveBruteForce {
   }
 
   *generator() {
-    this.current.index = 0;
-
     while (this.current.index < this.totalCalcs) {
       this.current.route = this.routes[this.current.index++];
       this.current.length = lengthOf(this.current.route);
@@ -49,4 +47,4 @@ class NaiveBruteForce {
   }
 }
 
-class NBF extends BruteForce {}
+class BF extends BruteForce {}

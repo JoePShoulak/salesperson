@@ -19,7 +19,7 @@ function getAllPermutations(arr) {
   return allPermutations;
 }
 
-const factorial = (n) => [...Array(n).keys()].reduce((a, v) => a * (v + 1), 1);
+const factorial = (n) => (n > 1 ? n * factorial(n - 1) : 1);
 
 const distTo = (p1, p2) => Math.sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2);
 
